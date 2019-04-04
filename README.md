@@ -10,8 +10,8 @@ Input:
 
 ## Env to run this script (after cloning)
 * Install selenium
-* download chromedriver and update mention the path in utils.py
+* download chromedriver and update chromedriver the path in utils.py
 * update your linkedin email address and password in utils.py
 * see an example in lookup_dict.py and update you messages
-* $ python send_connection_request_on_linkedIn.py <company name> <number of invitations to send> <number of times to scroll when hiring members are not found>
+* $ python send_connection_request_on_linkedIn.py `<company name> <number of invitations to send> <number of times to scroll when hiring members are not found>
 * $ python send_connection_request_on_linkedIn.py ericsson 3 2
