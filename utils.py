@@ -1,5 +1,6 @@
 import time
 import os
+import sys
 
 from lookup_dict import lookup_dict
 
@@ -44,8 +45,8 @@ def signin_to_linkedin(driver):
     password = driver.find_element_by_id("login-password")
 
     # Set your login Credentials  
-    email.send_keys("EMAIL")
-    password.send_keys("PASSWORD")
+    email.send_keys('xxxxx')
+    password.send_keys('xxxxx')
 
 
     # Find and Click upon the Login Button 
@@ -62,6 +63,8 @@ def get_a_person_to_connect(already_connected_list,
 
         time.sleep(10)
         
+        keywords_in_status_list = ['hiring', 'recruiting', 'technical recruiter', \
+                                    'data engineering manager']
         # run this loop until at least 1 person is found
         while not someone_to_connect and scroll_times:
             scroll_times -= 1
@@ -69,7 +72,7 @@ def get_a_person_to_connect(already_connected_list,
             a = driver.find_elements_by_xpath('//*[@class="org-people-profiles-module ember-view"]/ul/li')
 
             for a_link in a:
-                if a_link.text.endswith('Connect') and 'hiring' in a_link.text.lower():
+                if a_link.text.endswith('Connect') and any(kw in a_link.text.lower() for kw in keywords_in_status_list):
                     full_name = a_link.text.split("\n")[0].strip('.')
                     if full_name not in already_connected_list:
                         someone_to_connect.append(a_link)
@@ -82,7 +85,7 @@ def get_a_person_to_connect(already_connected_list,
                 time.sleep(10)
         return someone_to_connect
 
-def send_invitations(url, file, invitation_count, scroll_times, driver):
+def send_invitations(url, file, my_message, invitation_count, scroll_times, driver):
     if not os.path.exists(file): 
         print(file, " doesn't exist. Creating one.")
         with open(file, 'w'): pass
@@ -111,7 +114,11 @@ def send_invitations(url, file, invitation_count, scroll_times, driver):
 
         # add note
         print("Click add note")
-        driver.find_element_by_xpath('//button[@class="button-secondary-large mr1"]').click()
+
+        try:
+            driver.find_element_by_xpath('//button[@class="button-secondary-large mr1"]').click()
+        except:
+            driver.find_element_by_xpath('//button[@class="artdeco-button artdeco-button--secondary artdeco-button--3 mr1"]').click()
         time.sleep(3)
 
         # write message
@@ -123,7 +130,10 @@ def send_invitations(url, file, invitation_count, scroll_times, driver):
 
         # send invitation
         print("Click send invitation")
-        driver.find_element_by_xpath('//button[@class="button-primary-large ml1"]').click()
+        try:
+            driver.find_element_by_xpath('//button[@class="button-primary-large ml1"]').click()
+        except:
+            driver.find_element_by_xpath('//button[@class="artdeco-button artdeco-button--3 ml1"]').click()
         already_connected_list.append(full_name)
 
         # refresh the page

@@ -26,7 +26,7 @@ if __name__ == '__main__':
     time.sleep(15)
 
     ## send invitations
-    ret_invitation_count = utils.send_invitations(url, file, invitation_count, scroll_times, driver)
+    ret_invitation_count = utils.send_invitations(url, file, my_message, invitation_count, scroll_times, driver)
 
     if ret_invitation_count == 0:
         print("Sent invitation for " +str(invitation_count)+ " people. Done and dusted!")
