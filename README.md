@@ -6,4 +6,4 @@ Input:
 * company URL from linkedin, filtered by 'hiring' (Auto search will be implemented in next version)
 * number of invitations to send
 
-![](send-connection-requests-linkedin.gif)
+![](./gifs/send-connection-requests-linkedin.gif)
