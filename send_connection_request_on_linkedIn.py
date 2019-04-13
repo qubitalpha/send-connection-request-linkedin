@@ -33,3 +33,4 @@ if __name__ == '__main__':
     else:
         print("Sent invitation for " +str(invitation_count - ret_invitation_count)+ \
             ". Could not find " +str(ret_invitation_count)+ " more people.")
+    driver.quit()
