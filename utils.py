@@ -65,6 +65,8 @@ def get_a_person_to_connect(already_connected_list,
         
         keywords_in_status_list = ['hiring', 'recruiting', 'technical recruiter', \
                                     'data engineering manager']
+        stopwords_in_status_list = ['hiring product manager', 'hiring product design', \
+                    'design hiring', 'hiring android', 'hiring specialist', 'business']
         # run this loop until at least 1 person is found
         while not someone_to_connect and scroll_times:
             scroll_times -= 1
@@ -72,7 +74,9 @@ def get_a_person_to_connect(already_connected_list,
             a = driver.find_elements_by_xpath('//*[@class="org-people-profiles-module ember-view"]/ul/li')
 
             for a_link in a:
-                if a_link.text.endswith('Connect') and any(kw in a_link.text.lower() for kw in keywords_in_status_list):
+                if a_link.text.endswith('Connect') and \
+                    any(kw in a_link.text.lower() for kw in keywords_in_status_list) and \
+                    not any(kw in a_link.text.lower() for kw in stopwords_in_status_list):
                     full_name = a_link.text.split("\n")[0].strip('.')
                     if full_name not in already_connected_list:
                         someone_to_connect.append(a_link)
