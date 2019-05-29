@@ -38,35 +38,63 @@ def signin_to_linkedin(driver):
     # Load and WAIT for 3 seconds 
     time.sleep(3)
 
-    # Find the email or username input  
-    email = driver.find_element_by_id("login-email")
 
-    # Find password input 
-    password = driver.find_element_by_id("login-password")
+    input_email = 'email@domain.com'
+    input_password = 'password'
+    
+    try:
+        # Find the email or username input  
+        email = driver.find_element_by_id("login-email")
 
-    # Set your login Credentials  
-    email.send_keys('xxxxx')
-    password.send_keys('xxxxx')
+        # Find password input 
+        password = driver.find_element_by_id("login-password")
 
+        # Set your login Credentials  
+        email.send_keys(input_email)
+        password.send_keys(input_password)
 
-    # Find and Click upon the Login Button 
-    driver.find_element_by_xpath('//*[@id="login-submit"]').click()
+        # Find and Click upon the Login Button 
+        driver.find_element_by_xpath('//*[@id="login-submit"]').click()
 
+    # different login page
+    except Exception as e:
+
+        # click sign-in button
+        driver.find_element_by_class_name("nav__button-secondary").click()
+
+        # Find the email or username input 
+        email = driver.find_element_by_id("username")
+
+        # Find password input 
+        password = driver.find_element_by_id("password")
+
+        # Set your login Credentials  
+        email.send_keys(input_email)
+        password.send_keys(input_password)
+
+        # Find and Click upon the Login Button 
+        driver.find_element_by_class_name('btn__primary--large').click()
+    
     # Logging In happens here and wait 
     time.sleep(10)
 
 def get_a_person_to_connect(already_connected_list, 
-                            file, driver, scroll_times):
+                            file, driver, scroll_times, 
+                            keywords_in_status_list = ['hiring', 'recruiting', \
+                                    'technical recruiter', \
+                                    'data engineering manager'], 
+                            stopwords_in_status_list = ['hiring product manager', \
+                                        'hiring product design', 'design hiring', \
+                                        'hiring android', 'hiring specialist', \
+                                        'business']
+                            ):
         
         someone_to_connect = []
         scroll_amount = 0
 
         time.sleep(10)
         
-        keywords_in_status_list = ['hiring', 'recruiting', 'technical recruiter', \
-                                    'data engineering manager']
-        stopwords_in_status_list = ['hiring product manager', 'hiring product design', \
-                    'design hiring', 'hiring android', 'hiring specialist', 'business']
+        
         # run this loop until at least 1 person is found
         while not someone_to_connect and scroll_times:
             scroll_times -= 1
@@ -89,12 +117,18 @@ def get_a_person_to_connect(already_connected_list,
                 time.sleep(10)
         return someone_to_connect
 
-def send_invitations(url, file, my_message, invitation_count, scroll_times, driver):
+def send_invitations(current_company, invitation_count, scroll_times, driver):
+
+    my_message, url, file = current_company['my_message'], current_company['url'], current_company['file']
+
     if not os.path.exists(file): 
         print(file, " doesn't exist. Creating one.")
         with open(file, 'w'): pass
     already_connected_list = [line.strip() for line in open(file, 'r')]
-    someone_to_connect = get_a_person_to_connect(already_connected_list, file, driver, scroll_times)
+    someone_to_connect = get_a_person_to_connect(already_connected_list, file, \
+                                        driver, scroll_times, \
+                                        current_company['keywords_in_status_list'], \
+                                        current_company['stopwords_in_status_list'])
 
     while someone_to_connect and invitation_count:
         invitation_count -= 1
@@ -151,6 +185,9 @@ def send_invitations(url, file, my_message, invitation_count, scroll_times, driv
             for item in set(already_connected_list):
                 f.write("%s\n" % item)
 
-        someone_to_connect = get_a_person_to_connect(already_connected_list, file, driver, scroll_times)
+        someone_to_connect = get_a_person_to_connect(already_connected_list, file, driver, \
+                                                    scroll_times, \
+                                                    current_company['keywords_in_status_list'], \
+                                                    current_company['stopwords_in_status_list'])
         print("-"*45)
     return invitation_count

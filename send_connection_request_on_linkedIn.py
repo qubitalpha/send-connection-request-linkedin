@@ -19,14 +19,12 @@ if __name__ == '__main__':
     ## signin
     utils.signin_to_linkedin(driver)
 
-    my_message, url, file = current_company['my_message'], current_company['url'], current_company['file']
-
     ## load the company page
-    driver.get(url)
+    driver.get(current_company['url'])
     time.sleep(15)
 
     ## send invitations
-    ret_invitation_count = utils.send_invitations(url, file, my_message, invitation_count, scroll_times, driver)
+    ret_invitation_count = utils.send_invitations(current_company, invitation_count, scroll_times, driver)
 
     if ret_invitation_count == 0:
         print("Sent invitation for " +str(invitation_count)+ " people. Done and dusted!")
