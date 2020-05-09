@@ -38,23 +38,34 @@ def signin_to_linkedin(driver):
     # Load and WAIT for 3 seconds 
     time.sleep(3)
 
+    # click 'signin'
+    driver.find_element_by_xpath('/html/body/nav/a[3]').click()
 
-    input_email = 'email@domain.com'
-    input_password = 'password'
+    input_email = 'xxx'
+    input_password = 'xxx'
     
+    # //*[@id="username"]
     try:
+        time.sleep(3)
+
         # Find the email or username input  
-        email = driver.find_element_by_id("login-email")
+        email = driver.find_element_by_xpath("/html/body/div/main/div[2]/form/div[1]/input")
 
         # Find password input 
-        password = driver.find_element_by_id("login-password")
+        password = driver.find_element_by_xpath("/html/body/div/main/div[2]/form/div[2]/input")
+
 
         # Set your login Credentials  
         email.send_keys(input_email)
         password.send_keys(input_password)
 
-        # Find and Click upon the Login Button 
-        driver.find_element_by_xpath('//*[@id="login-submit"]').click()
+        time.sleep(3)
+
+        # Find and Click upon the Login Button
+        try: 
+            driver.find_element_by_xpath('/html/body/div/main/div[2]/form/div[3]/button').click()
+        except Exception as e:
+            driver.find_element_by_xpath('/html/body/div/main/div[2]/form/div[4]/button').click()
 
     # different login page
     except Exception as e:
@@ -71,6 +82,8 @@ def signin_to_linkedin(driver):
         # Set your login Credentials  
         email.send_keys(input_email)
         password.send_keys(input_password)
+
+        time.sleep(1)
 
         # Find and Click upon the Login Button 
         driver.find_element_by_class_name('btn__primary--large').click()
@@ -153,15 +166,15 @@ def send_invitations(current_company, invitation_count, scroll_times, driver):
         # add note
         print("Click add note")
 
-        try:
-            driver.find_element_by_xpath('//button[@class="button-secondary-large mr1"]').click()
-        except:
-            driver.find_element_by_xpath('//button[@class="artdeco-button artdeco-button--secondary artdeco-button--3 mr1"]').click()
+        # try:
+        #     driver.find_element_by_xpath('//button[@class="button-secondary-large mr1"]').click()
+        # except:
+        #     driver.find_element_by_xpath('//button[@class="artdeco-button artdeco-button--secondary artdeco-button--3 mr1"]').click()
         time.sleep(3)
 
         # write message
         print("Adding in my message")
-        inputElement = driver.find_element_by_xpath('//textarea')
+        inputElement = driver.find_element_by_xpath('/html/body/div[4]/div/div/div[2]/div[1]/textarea')
         message = "Hi " + hiring_person + my_message
         inputElement.send_keys(message)
         time.sleep(1)
@@ -169,9 +182,9 @@ def send_invitations(current_company, invitation_count, scroll_times, driver):
         # send invitation
         print("Click send invitation")
         try:
-            driver.find_element_by_xpath('//button[@class="button-primary-large ml1"]').click()
+            driver.find_element_by_xpath('/html/body/div[4]/div/div/div[3]/button[2]/span"]').click()
         except:
-            driver.find_element_by_xpath('//button[@class="artdeco-button artdeco-button--3 ml1"]').click()
+            driver.find_element_by_xpath('/html/body/div[4]/div/div/div[3]/button[2]').click()
         already_connected_list.append(full_name)
 
         # refresh the page
